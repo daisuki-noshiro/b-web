@@ -7,7 +7,7 @@ async function walkToLetter(page) {
   const size = page.viewportSize();
   await page.mouse.move(size.width / 2, size.height * 0.64);
   const state = await snapshot(page);
-  const destination = 980 - state.viewport.width / 2;
+  const destination = state.eventX - state.viewport.width / 2;
   const delta = destination - state.target;
   const count = Math.ceil(Math.abs(delta) * state.viewport.scale / 240);
   for (let i = 0; i < count; i++) await page.mouse.wheel(0, Math.sign(delta) * Math.min(240, Math.abs(delta) * state.viewport.scale / count));
@@ -42,7 +42,9 @@ test('实际加载 Canvas、Gin 代理与环境循环动画', async ({ page }, t
   expect(later.animations.grassSkew).not.toBe(initial.animations.grassSkew);
   await expect.poll(async () => (await snapshot(page)).fps).toBeGreaterThan(10);
   await testInfo.attach('runtime-sample', { body: JSON.stringify(await snapshot(page), null, 2), contentType: 'application/json' });
-  await page.screenshot({ path: '../artifacts/world-desktop.png' });
+  expect(initial.art.textures).toBe(18);
+  for (const source of Object.values(initial.art.sourcePixels)) expect(source.scaleMode).toBe('nearest');
+  await page.screenshot({ path: '../artifacts/visual-desktop.png' });
 });
 
 test('连续滚轮平滑收敛，键盘可逆向，四层视差投影一致', async ({ page }) => {
@@ -51,7 +53,7 @@ test('连续滚轮平滑收敛，键盘可逆向，四层视差投影一致', as
   await settle(page);
   const state = await snapshot(page);
   expect(state.renderX).toBeGreaterThan(500);
-  for (const [name, speed] of Object.entries({ sky: 0.08, mountains: 0.22, forest: 0.55, foreground: 1 })) expect(state.layers[name]).toBe(-Math.round(state.renderX * speed));
+  for (const [name, offset] of Object.entries(state.layers)) expect(offset).toBe(-Math.round(state.renderX * state.speeds[name]));
   await page.keyboard.down('ArrowLeft');
   await expect.poll(async () => (await snapshot(page)).target).toBeLessThan(state.target - 70);
   await page.keyboard.up('ArrowLeft');
@@ -65,7 +67,7 @@ test('世界两端有边界，大量滚轮输入之后仍能反向操作', async
   await settle(page);
   const end = await snapshot(page);
   expect(end.renderX).toBe(end.maxX);
-  await page.screenshot({ path: '../artifacts/world-end.png' });
+  await page.screenshot({ path: '../artifacts/visual-garden.png' });
   for (let i = 0; i < 55; i++) await page.mouse.wheel(0, -1000);
   await settle(page);
   expect((await snapshot(page)).renderX).toBe(0);
@@ -75,17 +77,18 @@ test('HTML 提示与 Canvas 信箱都可打开卡片，模态遮挡输入并恢�
   await walkToLetter(page);
   await page.locator('#interaction-hint').click();
   await expect(page.getByRole('dialog')).toBeVisible();
-  await expect(page.locator('#memory-title')).toHaveText('一起等过的晚霞');
-  expect(await page.locator('#memory-image').evaluate((img) => img.complete && img.naturalWidth > 0)).toBe(true);
+  await expect(page.locator('#memory-title')).toHaveText('把晴天，寄给你');
+  await expect.poll(() => page.locator('#memory-image').evaluate((img) => img.complete && img.naturalWidth > 0)).toBe(true);
   const frozen = await snapshot(page);
   await page.mouse.move(20, 450);
   await page.mouse.wheel(0, 500);
   await page.keyboard.press('ArrowRight');
   await expect.poll(async () => (await snapshot(page)).x).toBe(frozen.x);
-  await page.screenshot({ path: '../artifacts/memory-card.png' });
+  await page.screenshot({ path: '../artifacts/visual-memory.png' });
   await page.keyboard.press('Escape');
   await expect(page.getByRole('dialog')).toBeHidden();
   await expect(page.locator('#interaction-hint')).toBeFocused();
+  await page.screenshot({ path: '../artifacts/visual-cottage.png' });
   const state = await snapshot(page);
   await page.mouse.click(state.mailbox.x, state.mailbox.y + 40 * state.viewport.scale);
   await expect(page.getByRole('dialog')).toBeVisible();
@@ -99,7 +102,6 @@ test('HTML 提示与 Canvas 信箱都可打开卡片，模态遮挡输入并恢�
 
 test('移动尺寸、横屏和高分辨率缩放，提示始终对齐信箱', async ({ page }, testInfo) => {
   await walkToLetter(page);
-  await page.locator('#debug-toggle').click();
   for (const size of [{ width: 390, height: 844 }, { width: 667, height: 375 }, { width: 1920, height: 1080 }]) {
     await page.setViewportSize(size);
     await expect.poll(async () => (await snapshot(page)).viewport.width).toBe(Math.ceil(size.width / Math.max(1, Math.min(4, Math.floor(size.height / 360)))));
@@ -113,10 +115,10 @@ test('移动尺寸、横屏和高分辨率缩放，提示始终对齐信箱', as
     expect(canvas.height).toBeGreaterThanOrEqual(size.height);
     if (size.width === 390) {
       await testInfo.attach('mobile-sample', { body: JSON.stringify(state, null, 2), contentType: 'application/json' });
-      await page.screenshot({ path: '../artifacts/world-mobile.png' });
+      await page.screenshot({ path: '../artifacts/visual-mobile.png' });
       await page.locator('#interaction-hint').click();
       await expect(page.getByRole('dialog')).toBeVisible();
-      await page.screenshot({ path: '../artifacts/memory-mobile.png' });
+      await page.screenshot({ path: '../artifacts/visual-memory-mobile.png' });
       await page.locator('#memory-close').click();
       // 继续走到信箱接近视口边缘：提示保持完整，指示角仍指向世界物件。
       await page.mouse.move(size.width / 2, size.height * 0.64);
@@ -146,10 +148,11 @@ test('API 返回错误时明确提示，场景仍可以探索', async ({ page })
 });
 
 test('调试面板可以隐藏；减少动态效果模式仍可用按钮探索和打开卡片', async ({ page }) => {
-  await page.locator('#debug-toggle').click();
   await expect(page.locator('#debug-panel')).toBeHidden();
   await page.locator('#debug-toggle').click();
   await expect(page.locator('#debug-panel')).toBeVisible();
+  await page.locator('#debug-toggle').click();
+  await expect(page.locator('#debug-panel')).toBeHidden();
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const initial = await snapshot(page);
   await page.locator('#move-right').focus();
@@ -164,4 +167,27 @@ test('调试面板可以隐藏；减少动态效果模式仍可用按钮探索�
   await expect(page.getByRole('dialog')).toBeVisible();
   await page.locator('#memory-close').click();
   await expect(page.getByRole('dialog')).toBeHidden();
+});
+
+test('第一阶段景观仍可对照，旧事件可以正常打开', async ({ page }) => {
+  await page.locator('#scene-switch').click();
+  await expect(page.locator('#loading')).toBeHidden();
+  await expect.poll(async () => (await snapshot(page)).scene).toBe('technical');
+  expect((await snapshot(page)).worldWidth).toBe(6400);
+  expect((await snapshot(page)).art).toBe(null);
+  await walkToLetter(page);
+  await page.locator('#interaction-hint').click();
+  await expect(page.locator('#memory-title')).toHaveText('一起等过的晚霞');
+  await page.locator('#memory-close').click();
+});
+
+test('完整世界画幅正常，输出真实全景与纹理状态', async ({ page }, testInfo) => {
+  await page.setViewportSize({ width: 4096, height: 800 });
+  await expect.poll(async () => (await snapshot(page)).viewport.width).toBe(2048);
+  await settle(page);
+  const state = await snapshot(page);
+  expect(state.maxX).toBe(0);
+  expect(state.renderX).toBe(0);
+  await page.locator('canvas').screenshot({ path: '../artifacts/visual-panorama.png' });
+  await testInfo.attach('panorama-textures', { body: JSON.stringify(state, null, 2), contentType: 'application/json' });
 });

@@ -1,8 +1,12 @@
-# b-web · 生日横向世界技术原型
+# b-web · 晴光写给你
 
-在晚霞下横向探索一片连续的像素世界，遇到路边的信箱，打开一张 HTML 回忆卡片。
+当前美术实验分支：`codex/visual-experiment`。在明亮的湖畔像素世界里横向探索，遇到林间小屋和路边信箱，打开一张风景明信片。
 
-这是第一阶段技术验证：景观由 PixiJS Graphics 绘制，图片与回忆是本地占位内容。未实现登录、正式相册、祝福、蛋糕、数据库或后台。
+第二阶段使用授权明确的 Ansimuz 手绘 PNG，完成五层视差、地面/湖岸拼接、倒影、云层、花草和纸灯动画，以及重新设计的 HTML UI。没有采用 AI 图片。图片与回忆仍是实验内容；未实现登录、正式相册、祝福系统、蛋糕、数据库或后台。
+
+**对照与回退**：访问 `/?scene=technical` 对照第一阶段 Graphics 景观。要回到包括旧 UI 在内的完整版本，可执行 `git switch --detach stage-1-technical-validation`；返回实验用 `git switch codex/visual-experiment`。基线分支 `codex/init-b-web` 保留。
+
+设计说明、实际截图和限制见 [视觉实验报告](docs/visual-experiment.md)；素材逐项授权见 [素材来源](docs/asset-sources.md)。第一阶段记录保留在 [技术验证报告](docs/technical-validation.md)。
 
 项目位置：`E:\go\code\birthday-web2\b-web`。与原 `birthday-web` / `a-web` 工程独立。
 
@@ -18,6 +22,8 @@
 
 ```text
 b-web/
+├─ assets/originals/               # 采用的第三方原始 PNG（CC0）
+├─ scripts/prepare_art.py          # 可重复的改色/裁切/组合流程，非 AI
 ├─ cmd/server/main.go              # 入口、环境变量、优雅退出
 ├─ internal/httpserver/
 │  ├─ router.go                    # Gin API、可选生产静态文件
@@ -27,13 +33,13 @@ b-web/
 │  ├─ package.json / package-lock.json
 │  ├─ vite.config.js               # /api 开发代理
 │  ├─ playwright.config.js
-│  ├─ public/                      # 本地 favicon 与占位风景 SVG
+│  ├─ public/art/                  # 19 张输出 PNG 与来源/哈希 manifest
 │  ├─ src/
 │  │  ├─ main.js                   # 模块编排、生命周期、更新循环
 │  │  ├─ config.js                 # 世界宽度、视差速度、区域、事件坐标
 │  │  ├─ styles.css
 │  │  ├─ core/                     # Application、Camera、像素布局
-│  │  ├─ world/                    # World 与 Parallax
+│  │  ├─ world/                    # 美术场景、素材加载、Parallax、旧场景对照
 │  │  ├─ input/                    # 滚轮、键盘、长按按钮
 │  │  ├─ interaction/              # 坐标检测、事件分发
 │  │  ├─ data/                     # 独立回忆占位内容
@@ -41,6 +47,10 @@ b-web/
 │  ├─ tests/                       # 核心单元测试与真实浏览器 E2E
 │  └─ dist/                        # npm run build 生成，Git 忽略
 ├─ docs/technical-validation.md
+├─ docs/visual-experiment.md
+├─ docs/asset-sources.md
+├─ docs/licenses/                 # 随包许可证原文
+├─ docs/screenshots/              # 第二阶段实际运行截图
 ├─ artifacts/                     # 实测截图、结果，Git 忽略生成物
 ├─ bin/                           # 本地编译产物，Git 忽略
 ├─ .gitignore
@@ -87,9 +97,11 @@ npm run dev -- --port 5174
 2. 按住 `←` / `→`，或长按底部按钮。按钮也支持 Enter / Space。
 3. 探索到世界 `x = 980` 的信箱附近，点击信箱或“打开这封回忆”。
 4. 卡片可通过 `×`、返回按钮、Escape 或点击遮罩关闭。打开时镜头停止，世界输入被隔离。
-5. 右上“调试”显示/隐藏 FPS、镜头左缘世界坐标、视口中心所在区域和 Gin API 状态；窄屏默认收起。
+5. 右上“观察面板”显示/隐藏 FPS、镜头左缘世界坐标、视口中心所在区域和 Gin API 状态；默认收起，添加 `?debug` 可默认打开。
 
-世界宽度为 6400 逻辑像素。视差速度在 `src/config.js` 中调整，其他层范围为 0～1，前景必须为 1，确保交互物件世界坐标可靠。
+美术实验宽 2048 逻辑像素，三个景观区域；第一阶段对照宽 6400。视差速度在 `src/config.js` 中调整，其他层范围为 0～1，前景必须为 1，保持事件世界坐标一致。
+
+素材已经预处理并提交，普通开发/构建只需要 Go 和 npm。如要重新改色、裁切或组合，安装 Python 与 Pillow 后从项目根运行 `python scripts/prepare_art.py`。处理输入、输出与许可均在项目中，无需再次下载美术资源。
 
 ## 生产启动（Gin 托管构建资源）
 
@@ -127,6 +139,8 @@ npm run build
 npx playwright install chromium
 npm run test:e2e
 ```
+
+美术实验的 E2E 共 9 项，会检查素材、五层视差、第一阶段对照并保存实际截图。普通生产包启动后，还可在 `frontend` 运行 `npm run test:production`；默认连接 `http://127.0.0.1:18081`，设置 `BWEB_SMOKE_URL` 可改为自己的 Gin 地址。
 
 E2E 默认自动启动 `127.0.0.1:18080` 的 Gin 和 `5173` 的 Vite，用真实浏览器输入操作，结束后关闭自己启动的服务。端口已被使用时可能复用服务；请确认是此项目，否则改端口配置。
 

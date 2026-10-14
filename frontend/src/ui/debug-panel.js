@@ -9,7 +9,7 @@ export class DebugPanel {
     const options = { signal: this.abort.signal };
     this.toggle.addEventListener('click', () => this.setVisible(this.panel.hidden), options);
     document.getElementById('debug-close').addEventListener('click', () => this.setVisible(false), options);
-    this.setVisible(window.innerWidth > 700);
+    this.setVisible(new URLSearchParams(window.location.search).has('debug'));
   }
 
   setVisible(visible) { this.panel.hidden = !visible; this.toggle.setAttribute('aria-expanded', String(visible)); }

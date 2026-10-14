@@ -1,11 +1,13 @@
-// 第一阶段的本地占位内容；后续可替换为 API 数据，无需修改世界和事件系统。
+import { SCENE } from '../config.js';
+
+// 内容独立于场景；明信片由有明确授权的真实像素素材组合，不是私人照片。
 export const memories = {
   evening: {
-    title: '一起等过的晚霞',
+    title: SCENE === 'technical' ? '一起等过的晚霞' : '把晴天，寄给你',
     date: '2026-10-15',
     displayDate: '2026 / 10 / 15',
-    description: '如果能把一个普通的傍晚装进信封，我想留下天空慢慢变粉的那一刻，以及刚好站在身边的你。这里先放一张占位风景，等我们把真正的回忆寄进来。',
-    image: '/images/memory-placeholder.svg',
-    alt: '占位像素插画：晚霞、山林与路边的信箱',
+    description: '想把湖边的阳光、慢慢飘过的云，还有风里摇晃的小花，都装进这封信。愿你的新一岁，依然有勇气去喜欢、去期待，也总有人陪你收藏那些小小的幸福。',
+    image: SCENE === 'technical' ? '/images/memory-placeholder.svg' : '/art/memory-landscape.png',
+    alt: '用授权像素素材组合的明信片：晴光、山林、湖畔小屋和信箱',
   },
 };

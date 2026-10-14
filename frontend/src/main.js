@@ -8,9 +8,15 @@ import { Interaction } from './interaction/interaction.js';
 import { Modal } from './ui/modal.js';
 import { DebugPanel } from './ui/debug-panel.js';
 import { memories } from './data/memories.js';
-import { WORLD, WORLD_EVENTS, regionAt } from './config.js';
+import { SCENE, WORLD, WORLD_EVENTS, regionAt } from './config.js';
+import { loadArt } from './world/art.js';
 
 async function start() {
+  document.body.dataset.scene = SCENE;
+  const compareLink = document.getElementById('scene-switch');
+  compareLink.href = SCENE === 'technical' ? '/' : '/?scene=technical';
+  compareLink.textContent = SCENE === 'technical' ? '返回美术实验 ↗' : '第一阶段对照 ↗';
+  if (SCENE === 'technical') await import('./prototype.css');
   const host = document.getElementById('world');
   const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const camera = new Camera(WORLD.width, 1, motion.matches);
@@ -38,7 +44,9 @@ async function start() {
     if (world) world.resize(next);
   });
   const app = runtime.app;
-  world = new World(app.stage, (id) => interaction.trigger(id));
+  const WorldClass = SCENE === 'technical' ? (await import('./world/prototype-world.js')).World : World;
+  const art = SCENE === 'visual' ? await loadArt() : undefined;
+  world = new WorldClass(app.stage, (id) => interaction.trigger(id), art);
   world.resize(viewport);
   world.reducedMotion = motion.matches;
   input = new Input(host, camera, () => viewport.scale, () => modal.isOpen || document.hidden);
@@ -76,6 +84,12 @@ async function start() {
     const region = regionAt(camera.centerX);
     if (lastRegion !== region.name) {
       document.getElementById('region-label').textContent = `${region.number} / ${region.name}`;
+      if (SCENE === 'visual') {
+        document.querySelector('.intro > .eyebrow').innerHTML = `<span class="tiny-square"></span> SUNLIT LETTERS / CHAPTER ${region.number}`;
+        document.querySelector('.intro h1').innerHTML = region.title;
+        document.querySelector('.intro-note').innerHTML = region.note;
+        document.querySelector('.intro').dataset.region = region.number;
+      }
       lastRegion = region.name;
     }
     const progress = Math.round(camera.renderX / Math.max(1, camera.maxX) * 1000) / 10;
@@ -97,6 +111,8 @@ async function start() {
         x: camera.x, renderX: camera.renderX, target: camera.target, maxX: camera.maxX,
         viewport: { ...viewport }, modalOpen: modal.isOpen, nearby: interaction.nearby?.id || null,
         region: regionAt(camera.centerX).name, fps: debug.fps,
+        scene: SCENE, worldWidth: WORLD.width, speeds: WORLD.speeds, eventX: WORLD_EVENTS[0].x,
+        art: world.diagnostics?.() || null,
         layers: Object.fromEntries(Object.entries(world.layers).map(([name, node]) => [name, node.x])),
         animations: { cloudX: world.clouds[2].node.x, lampAlpha: world.lamp.alpha, grassSkew: world.grasses[1].node.skew.x },
         mailbox: world.eventScreenPosition(camera, WORLD_EVENTS[0]),

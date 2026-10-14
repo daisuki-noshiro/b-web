@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#efb298" />
-    <title>b-web · 把日子走成风景</title>
+    <meta name="theme-color" content="#f3e4c9" />
+    <title>b-web · 晴光写给你</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
@@ -12,13 +12,14 @@
       <div id="world" aria-label="可以横向探索的像素世界"></div>
       <header class="masthead">
         <a class="wordmark" href="/" aria-label="b-web 首页">b<span> / </span>web<span class="wordmark-dot">✳</span></a>
-        <span class="edition">A LITTLE WORLD, FOR YOU<br /><b>生日世界 · 技术原型 01</b></span>
-        <button id="debug-toggle" class="text-button" aria-controls="debug-panel" aria-expanded="true">调试 <span>↗</span></button>
+        <span class="edition">A LITTLE WORLD, FOR YOU<br /><b>晴光写给你 · 视觉实验 02</b></span>
+        <nav class="header-actions"><a id="scene-switch" class="scene-switch" href="/?scene=technical">第一阶段对照 ↗</a><button id="debug-toggle" class="text-button" aria-controls="debug-panel" aria-expanded="false">观察面板 <span>↗</span></button></nav>
       </header>
       <section class="intro" aria-label="探索说明">
-        <p class="eyebrow"><span class="tiny-square"></span> SOMEWHERE IN OUR MEMORIES</p>
-        <h1>把日子，<br />走成风景。</h1>
-        <p class="intro-note">慢慢向前，看看晚霞。<br />有一封信，正在路边等你。</p>
+        <p class="eyebrow"><span class="tiny-square"></span> SUNLIT LETTERS / CHAPTER 01</p>
+        <h1>今天，世界<br />为你温柔。</h1>
+        <p class="intro-note">把喜欢的风景，藏进一封信。<br />沿着湖边慢慢走，惊喜就在前面。</p>
+        <span class="intro-signature">a birthday walk, just for you <span>✳</span></span>
       </section>
       <button id="interaction-hint" class="interaction-hint" hidden>✉ 打开这封回忆 <span>↗</span></button>
       <aside id="debug-panel" class="debug-panel" aria-label="开发调试信息">
@@ -29,22 +30,23 @@
           <div><dt>当前区域</dt><dd id="debug-region">晚霞起点</dd></div>
           <div><dt>Gin API</dt><dd id="debug-api" data-state="pending">连接中…</dd></div>
         </dl>
-        <p>4 层视差 · PIXI v8 / GSAP</p>
+        <p>像素景观 · PIXI v8 / GSAP</p>
       </aside>
       <footer class="journey-ui">
-        <div class="journey-caption"><span class="eyebrow">THE EVENING WALK</span><span id="region-label">01 / 晚霞起点</span></div>
+        <div class="journey-caption"><span class="eyebrow">A WALK TO REMEMBER</span><span id="region-label">01 / 晴光湖畔</span></div>
         <div class="journey-controls">
           <button id="move-left" class="direction-button" aria-label="向左探索">←</button>
-          <div class="journey-track"><div class="track-line"><span id="progress-fill"></span><i id="progress-marker"></i></div><div class="track-labels"><span>晚霞起点</span><span>回忆邮局</span><span>风吹草地</span></div></div>
+          <div class="journey-track"><div class="track-line"><span id="progress-fill"></span><i id="progress-marker"></i></div><div class="track-labels"><span>晴光湖畔</span><span>回忆小屋</span><span>花开岸边</span></div></div>
           <button id="move-right" class="direction-button" aria-label="向右探索">→</button>
         </div>
         <p class="control-note">滚动鼠标 / ← → 方向键 / 长按两侧按钮 <span>·</span> 自由探索</p>
       </footer>
-      <div id="loading" class="loading">正在铺开这片晚霞…</div>
+      <div class="art-credit"><span>SCENE STUDY / 02</span><a href="https://ansimuz.itch.io/" target="_blank" rel="noopener noreferrer">ART BY ANSIMUZ · CC0 ↗</a></div>
+      <div id="loading" class="loading"><span class="loading-flower">✳</span>正在收集一片晴光…</div>
       <dialog id="memory-dialog" class="memory-dialog" aria-labelledby="memory-title">
         <button id="memory-close" class="close-button" aria-label="关闭回忆卡片">×</button>
-        <div class="memory-photo"><img id="memory-image" alt="" /><span>PLACEHOLDER / 01</span></div>
-        <div class="memory-copy"><p class="eyebrow">A POSTCARD FROM US</p><time id="memory-date"></time><h2 id="memory-title"></h2><p id="memory-description"></p><button id="memory-return" class="return-button">收好回忆，继续走 <span>→</span></button></div>
+        <div class="memory-photo"><img id="memory-image" alt="" /><span>SUNLIT LETTERS · NO. 01</span></div>
+        <div class="memory-copy"><span class="postage-stamp">FOR<br />YOU<br /><b>✳</b></span><p class="eyebrow">A POSTCARD FROM US</p><time id="memory-date"></time><h2 id="memory-title"></h2><p id="memory-description"></p><button id="memory-return" class="return-button">收好回忆，继续走 <span>→</span></button></div>
       </dialog>
     </main>
     <script type="module" src="/src/main.js"></script>

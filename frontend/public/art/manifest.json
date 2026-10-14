@@ -1,0 +1,239 @@
+{
+  "sources": {
+    "magical-road/back.png": "bf6049880c18b7297bcf3e4223ef9a4c43fc2fcb3342393c386e2e16fa0eeedf",
+    "magical-road/middle.png": "c905694269f7adb0652484c92df3e31dd4c2abc29ff0d610580d13a20af210f3",
+    "magical-road/tileset.png": "f75d82ead5e96a056d385622942a0e6df70c0c4cd5faa1f25206b3b578deadca",
+    "sunnyland-forest/house.png": "a39640966e7cc9bf8e7034226aea227c5c1b886e1799435e91c7cb0010451176",
+    "sunnyland-forest/mushroom-red.png": "9771c7aacfb77afdebe74795b670b12cc3391210fcb994d82c9695ac1f13b0e0",
+    "sunnyland-forest/plant.png": "ece801813b28a27591f9661725ffce96fa533e58b1c586899fc6c82a002044ee",
+    "sunnyland-forest/rock.png": "f69666313d22591e3d6895d4855344baead87a0379f523efa24bca2b81bff904",
+    "sunnyland-trees/pine.png": "0bae22e7c440732da48a9957de2becbaf0659c2728cb1d3e9c786bf879bb55d8",
+    "sunnyland-trees/tree.png": "a771df8afeb21e2b35466867cb1982b15236f4b05cb3542ca8b025493ca5a7df",
+    "sunnyland-woods/bg-clouds.png": "0fdc58eb6efef6cdab2efbf9e8445142a1ff4f7580e83af6834cf1850a3a1767",
+    "sunnyland-woods/bg-mountains.png": "e1502b2fc1f188dc59261f9d44cbd674960494c13ff05ce88c8f355b1f6185e7"
+  },
+  "outputs": [
+    {
+      "file": "art/sky.png",
+      "sources": [
+        "magical-road/back.png"
+      ],
+      "modification": "六色色板替换、云形透明提取与疏密重组，纯色延伸避免纵向重复",
+      "size": [
+        1024,
+        768
+      ],
+      "sha256": "d086c08a82ac9173519fc960800bdb93b56ebdb53d74cbf1b1e03e95ed43dbd8"
+    },
+    {
+      "file": "art/clouds.png",
+      "sources": [
+        "sunnyland-woods/bg-clouds.png"
+      ],
+      "modification": "移除不透明底色，裁切云层并改为暖色半透明",
+      "size": [
+        160,
+        124
+      ],
+      "sha256": "3206fc4134c6725acc041a5f928d89d7343a398f87883b332b0d0b2517228fb5"
+    },
+    {
+      "file": "art/mountains.png",
+      "sources": [
+        "sunnyland-woods/bg-mountains.png"
+      ],
+      "modification": "蓝色山脉改为低对比鼠尾草色，保留像素岩面纹理",
+      "size": [
+        160,
+        208
+      ],
+      "sha256": "de4e95748e9c1db0c3227dda74c9cd2b0ce4e7936695819d751e3c408f487734"
+    },
+    {
+      "file": "art/forest.png",
+      "sources": [
+        "magical-road/middle.png"
+      ],
+      "modification": "分离远处针叶林，色板暖绿化",
+      "size": [
+        64,
+        64
+      ],
+      "sha256": "68cb973ea6de289ab4075769e9748ba3de12f3fdbe9a1650a9db7eda1060b556"
+    },
+    {
+      "file": "art/meadow.png",
+      "sources": [
+        "magical-road/middle.png"
+      ],
+      "modification": "分离有花丛细节的草地，色板暖绿化",
+      "size": [
+        64,
+        60
+      ],
+      "sha256": "4600eee9e5d124b78a3157e46d504d3ccc09dc2bc232e06b2cb3695ec0f7b900"
+    },
+    {
+      "file": "art/path.png",
+      "sources": [
+        "magical-road/middle.png"
+      ],
+      "modification": "裁切土路，保留不规则路缘并调整暖沙色",
+      "size": [
+        64,
+        20
+      ],
+      "sha256": "c13c066e7669f017ec39b5c1fcb3a205a6aaa920c130d07cfeac1b3b846be611"
+    },
+    {
+      "file": "art/bank.png",
+      "sources": [
+        "magical-road/tileset.png"
+      ],
+      "modification": "裁切中间可平铺草岸块；降低饱和度并提亮",
+      "size": [
+        64,
+        96
+      ],
+      "sha256": "ba77d28decc4880bad3bed4f117cb4e73ec5992d3f97a0d73304782a1c9bba84"
+    },
+    {
+      "file": "art/tree.png",
+      "sources": [
+        "sunnyland-trees/tree.png"
+      ],
+      "modification": "暖绿树冠、铜棕枝干与暖色高光，保留透明边界",
+      "size": [
+        119,
+        111
+      ],
+      "sha256": "b99937920a47f8052b02789479f4b8e497be2eb51804ff627a9ce8c4a9cd4153"
+    },
+    {
+      "file": "art/pine.png",
+      "sources": [
+        "sunnyland-trees/pine.png"
+      ],
+      "modification": "暖绿树冠、铜棕枝干与暖色高光，保留透明边界",
+      "size": [
+        82,
+        130
+      ],
+      "sha256": "e0e707f4449ddd281e202fcbfbeb93b472f741b5c7cfa4299bff3ae8703d0bf9"
+    },
+    {
+      "file": "art/house.png",
+      "sources": [
+        "sunnyland-forest/house.png"
+      ],
+      "modification": "提亮暗部、暖木色改色；屋顶植被改为暖绿",
+      "size": [
+        193,
+        165
+      ],
+      "sha256": "dba18a794cf9b456672a332d802b008902fd5e5f3b43eb32af5ab4c906ddc333"
+    },
+    {
+      "file": "art/plant.png",
+      "sources": [
+        "sunnyland-forest/plant.png"
+      ],
+      "modification": "提亮暗部、暖木色改色；屋顶植被改为暖绿",
+      "size": [
+        36,
+        36
+      ],
+      "sha256": "dfc15eeff77a16d9eec9e4ce8c479728aedbb30d6e7ef22879e921cbf203768d"
+    },
+    {
+      "file": "art/mushroom-red.png",
+      "sources": [
+        "sunnyland-forest/mushroom-red.png"
+      ],
+      "modification": "提亮暗部、暖木色改色；屋顶植被改为暖绿",
+      "size": [
+        23,
+        28
+      ],
+      "sha256": "99603861fb3c2b3a448ee965a0e73b3598e35b98c0fba625e5d06a0e0c2ca68d"
+    },
+    {
+      "file": "art/rock.png",
+      "sources": [
+        "sunnyland-forest/rock.png"
+      ],
+      "modification": "提亮暗部、暖木色改色；屋顶植被改为暖绿",
+      "size": [
+        49,
+        29
+      ],
+      "sha256": "f4ec1e0defa1b158493a4696d88fa3523a19a83bf92b826a99b8181bee6f8af2"
+    },
+    {
+      "file": "art/sun.png",
+      "sources": [],
+      "modification": "原创像素太阳与离散光晕；显式坐标绘制，无 AI",
+      "size": [
+        96,
+        96
+      ],
+      "sha256": "3da541baafc3ca5ce6b291de6e232fc916c331b2ca36004ee85c7fa8a8f7a314"
+    },
+    {
+      "file": "art/water.png",
+      "sources": [],
+      "modification": "原创离散水面色阶和稀疏水纹；确定性手工程序绘制，无 AI",
+      "size": [
+        256,
+        96
+      ],
+      "sha256": "fddf67600333a0707c1d31add88f6931070bf98f0e3d6800da1d9a90e4849be7"
+    },
+    {
+      "file": "art/mailbox.png",
+      "sources": [],
+      "modification": "原创信箱，显式像素坐标与有限色板，无 AI",
+      "size": [
+        44,
+        64
+      ],
+      "sha256": "235ca7abe8d4f2a3b4665dc403f4afcab0022416e5ff97afbb2cb521a9c41578"
+    },
+    {
+      "file": "art/flowers.png",
+      "sources": [],
+      "modification": "原创小花簇；显式像素坐标，无 AI",
+      "size": [
+        80,
+        24
+      ],
+      "sha256": "77464555c6f3d992b5e4da8c8d2e363a69cc28e02cbb442204a49fc4a6615350"
+    },
+    {
+      "file": "art/lantern.png",
+      "sources": [],
+      "modification": "原创纸灯像素点缀，无 AI",
+      "size": [
+        14,
+        26
+      ],
+      "sha256": "345b41f68ad96b636577951b94cb785c90e7bbc1772339085cea8c6a1d9d5c84"
+    },
+    {
+      "file": "art/memory-landscape.png",
+      "sources": [
+        "magical-road/back.png",
+        "magical-road/middle.png",
+        "sunnyland-woods/bg-mountains.png",
+        "sunnyland-trees/tree.png",
+        "sunnyland-forest/house.png"
+      ],
+      "modification": "由本项目改色版本与原创太阳/信箱组合成明信片",
+      "size": [
+        384,
+        256
+      ],
+      "sha256": "e9a2940be5f224ec10b8f7f1db45f2778e3e1759d1f6c6607e20710445fdfab5"
+    }
+  ]
+}

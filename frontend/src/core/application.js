@@ -17,7 +17,7 @@ export async function createApplication(host, onResize) {
     background: '#f2c3a5',
     autoStart: false,
   });
-  app.canvas.setAttribute('aria-label', '像素晚霞景观，使用滚轮或左右方向键横向探索');
+  app.canvas.setAttribute('aria-label', '像素风景，使用滚轮或左右方向键横向探索');
   host.append(app.canvas);
   let current;
   const resize = () => {
